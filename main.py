@@ -1,6 +1,7 @@
 from typing import Union
+from pyppeteer import launch
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
 import csv
@@ -8,6 +9,9 @@ import mysql.connector
 import datetime
 import random
 import os
+import uvicorn
+import time
+import requests
 
 app = FastAPI()
 
@@ -26,7 +30,7 @@ app.add_middleware(
 )
 
 db = mysql.connector.connect(
-    host="localhost",
+    host="192.168.0.121",
     user="root",
     password="example",
     database="twitter"
@@ -80,3 +84,23 @@ def run():
     # run "t whois <screen_name>" and return the result
     os.system(f't search all "مونترال" -n 100 --csv > temp/search.csv')
     return {"result": "done"}
+
+
+@app.post("/twitter")
+async def analyze_twitter_user(request: Request):
+    data = await request.json()
+    username = data["name"]
+
+    result = requests.post(
+        "http://localhost:3000/twitter", json={"name": username}
+    )
+
+    print(result.text)
+
+    return result.text
+
+    # return result.json()
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
