@@ -25,7 +25,7 @@ pandas==2.0.2
 pandas-stubs==2.0.2.230605
 protobuf==3.20.3
 pycodestyle==2.10.0
-pydantic==1.10.9
+pydantic==1.10.13
 pyee==8.2.2
 pyppeteer==1.0.2
 python-dateutil==2.8.2
